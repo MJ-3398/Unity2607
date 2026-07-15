@@ -21,7 +21,7 @@ public class TitleSet : MonoBehaviour
 
     public void Setting()
     {
-        Debug.Log("Setting");
+        SceneManager.LoadScene("SettingScene");
     }
     public void Quit()
     {
