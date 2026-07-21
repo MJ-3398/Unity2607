@@ -10,7 +10,7 @@ public class TitleSet : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("IngameSpace");
     }
 
     // Update is called once per frame
