@@ -2,10 +2,20 @@ using UnityEngine;
 
 public class Pot : InteractionSystem
 {
-    public GameObject UI;
+    [SerializeField] private GameObject interactionUI;
+
+    public void ShowUI()
+    {
+        interactionUI.SetActive(true);
+    }
+
+    public void HideUI()
+    {
+        interactionUI.SetActive(false);
+    }
 
     public override void Interact()
     {
-        UI.SetActive(true);
+        Debug.Log("포션 제작창 열기");
     }
 }

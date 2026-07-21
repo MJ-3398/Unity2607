@@ -3,45 +3,36 @@ using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public Camera mainCamera;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private float interactionDistance = 3f;
 
-    public float interactDistance = 3f;
-
-    public GameObject interactionUI;
-
-    public TextMeshProUGUI interactionText;
-
-    private InteractionSystem currentInteractable;
-
+    private InteractionSystem currentTarget;
     void Update()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, interactDistance))
-        {
-            InteractionSystem interactable = hit.collider.GetComponent<InteractionSystem>();
-
-            if (interactable != null)
+            if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
             {
-                currentInteractable = interactable;
+                InteractionSystem interactable = hit.collider.GetComponent<InteractionSystem>();
 
-                interactionUI.SetActive(true);
-
-                interactionText.text = interactable.interationText;
-
-                if (Input.GetMouseButtonDown(0))
+                if (interactable != currentTarget)
                 {
-                    interactable.Interact();
-                }
+                    if (currentTarget != null)
+                        currentTarget.HideUI();
 
-                return;
+                    currentTarget = interactable;
+
+                    if (currentTarget != null)
+                        currentTarget.ShowUI();
+                }
+            }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (currentTarget != null)
+            {
+                currentTarget.Interact();
             }
         }
-
-        currentInteractable = null;
-
-        interactionUI.SetActive(false);
     }
 }
