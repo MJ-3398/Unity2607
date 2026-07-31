@@ -13,6 +13,7 @@ public abstract class InteractionSystem : MonoBehaviour
 
     public virtual void ShowUI()
     {
+        
         if (interactionUI != null)
             interactionUI.SetActive(true);
     }

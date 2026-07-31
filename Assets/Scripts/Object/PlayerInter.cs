@@ -9,13 +9,13 @@ public class PlayerInteraction : MonoBehaviour
     private InteractionSystem currentTarget;
     void Update()
     {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+       
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
         {
             InteractionSystem interactable = hit.collider.GetComponentInParent<InteractionSystem>();
-        
-        
+
             if (interactable != currentTarget)
             {
                 if (currentTarget != null)
@@ -33,7 +33,7 @@ public class PlayerInteraction : MonoBehaviour
         }
 
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             if (currentTarget != null)
             {
