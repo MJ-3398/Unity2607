@@ -11,6 +11,7 @@ public class InventoryUI : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("InventoryUI Start");
         CreateSlots();
     }
 
