@@ -1,44 +1,76 @@
 using UnityEngine;
-using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private float interactionDistance = 10f;
+    [SerializeField] private float interactionDistance = 100f;
 
     private InteractionSystem currentTarget;
-    void Update()
+
+    private void Start()
     {
-       
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (mainCamera == null)
+            mainCamera = Camera.main;
+    }
 
-        if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
+    private void Update()
+    {
+        if (mainCamera == null)
+            return;
+
+        if (Input.GetMouseButton(1))
         {
-            InteractionSystem interactable = hit.collider.GetComponentInParent<InteractionSystem>();
-
-            if (interactable != currentTarget)
-            {
-                if (currentTarget != null)
-                {
-                    currentTarget.HideUI();
-                    currentTarget = null;
-                }
-                currentTarget = interactable;
-        
-                if (currentTarget != null)
-                {
-                 currentTarget.ShowUI();
-                }
-            }
+            SetCurrentTarget(null);
+            return;
         }
 
+        CheckMouseTarget();
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && currentTarget != null)
         {
-            if (currentTarget != null)
-            {
-                currentTarget.Interact();
-            }
+            currentTarget.Interact();
         }
+    }
+
+    private void CheckMouseTarget()
+    {
+        Ray ray =
+            mainCamera.ScreenPointToRay(Input.mousePosition);
+
+        Debug.DrawRay(
+            ray.origin,
+            ray.direction * interactionDistance,
+            Color.red
+        );
+
+        if (Physics.Raycast(
+            ray,
+            out RaycastHit hit,
+            interactionDistance
+        ))
+        {
+            InteractionSystem newTarget =
+                hit.collider.GetComponentInParent<InteractionSystem>();
+
+            SetCurrentTarget(newTarget);
+        }
+        else
+        {
+            SetCurrentTarget(null);
+        }
+    }
+
+    private void SetCurrentTarget(InteractionSystem newTarget)
+    {
+        if (newTarget == currentTarget)
+            return;
+
+        if (currentTarget != null)
+            currentTarget.HideUI();
+
+        currentTarget = newTarget;
+
+        if (currentTarget != null)
+            currentTarget.ShowUI();
     }
 }
